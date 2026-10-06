@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Скриня думок — скарги і побажання</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f8ff; --ink:#14213d; --muted:#5b6785; --card:#fff;
+  --blue:#2b50f0; --blue-soft:#e3e9ff; --sun:#ffc93c; --mint:#1fae82; --mint-soft:#dcf5ec; --red:#e5484d; --red-soft:#ffe6e7;
+  --line:#d9e2f5;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
+h1,h2{font-family:Unbounded,sans-serif;line-height:1.15;letter-spacing:-.01em}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+/* hero */
+header{position:relative;padding:56px 0 150px}
+.school{display:inline-block;font-weight:700;font-size:15px;background:var(--sun);color:var(--ink);padding:6px 14px;border-radius:99px;margin-bottom:22px}
+h1{font-size:clamp(34px,6.4vw,64px);max-width:12ch}
+.lead{max-width:46ch;margin-top:20px;color:var(--muted);font-size:18px}
+.btn{display:inline-block;margin-top:30px;background:var(--blue);color:#fff;font:700 16px Manrope;padding:15px 28px;border-radius:14px;border:0;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:0 8px 20px -8px var(--blue)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.6;cursor:wait}
+
+/* бульбашки — єдина «показова» анімація на сторінці */
+.bubbles{position:absolute;right:0;top:40px;width:min(380px,44vw);height:360px;pointer-events:none}
+.b{position:absolute;padding:14px 18px;border-radius:22px 22px 22px 6px;font-weight:600;font-size:15px;box-shadow:0 14px 30px -14px rgba(20,33,61,.35);animation:float 6s ease-in-out infinite}
+.b1{background:var(--mint-soft);color:#0d6e53;top:0;right:10%}
+.b2{background:var(--blue);color:#fff;top:120px;right:42%;border-radius:22px 22px 6px 22px;animation-delay:-2s}
+.b3{background:var(--sun);top:240px;right:0;animation-delay:-4s}
+@keyframes float{50%{transform:translateY(-14px)}}
+@media(max-width:760px){.bubbles{display:none}header{padding-bottom:120px}}
+
+/* форма */
+main{margin-top:-90px;position:relative}
+.card{background:var(--card);border-radius:28px;padding:clamp(22px,4vw,44px);box-shadow:0 30px 60px -30px rgba(43,80,240,.35);border:1px solid var(--line)}
+.card h2{font-size:clamp(22px,3.4vw,30px)}
+.sub{color:var(--muted);margin:8px 0 26px}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.types input{position:absolute;opacity:0}
+.types label{border:2px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;display:flex;gap:12px;align-items:center;font-weight:700;transition:all .2s}
+.types .ico{font-size:26px}
+.types small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.types label:hover{border-color:#b9c6ee}
+#t-w:checked~.lw{border-color:var(--mint);background:var(--mint-soft)}
+#t-c:checked~.lc{border-color:var(--red);background:var(--red-soft)}
+.types input:focus-visible+label,.types input:focus-visible~label{outline:3px solid var(--blue);outline-offset:2px}
+.field{margin-bottom:18px}
+.field>label{display:block;font-weight:700;margin-bottom:6px;font-size:15px}
+.field .opt{font-weight:400;color:var(--muted)}
+input[type=text],textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:13px 16px;transition:border-color .2s,background .2s}
+textarea{min-height:150px;resize:vertical}
+input[type=text]:focus,textarea:focus{outline:0;border-color:var(--blue);background:#fff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.count{text-align:right;font-size:13px;color:var(--muted);margin-top:4px}
+.anon{display:flex;gap:10px;align-items:center;margin:4px 0 6px;cursor:pointer;font-weight:600}
+.anon input{width:20px;height:20px;accent-color:var(--blue)}
+.hp{position:absolute;left:-9999px}
+.err{color:var(--red);font-weight:600;margin-top:12px;min-height:1.4em}
+@media(max-width:560px){.types,.row{grid-template-columns:1fr}}
+.reveal{max-height:200px;overflow:hidden;transition:max-height .35s ease,opacity .3s;opacity:1}
+.reveal.off{max-height:0;opacity:0}
+
+/* успіх */
+.done{text-align:center;padding:30px 0;display:none}
+.done.show{display:block}
+.done svg{width:92px;height:92px}
+.done circle{fill:var(--mint-soft)}
+.done path{stroke:var(--mint);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .6s .15s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.done h2{margin:18px 0 8px}
+.done p{color:var(--muted)}
+.link{background:none;border:0;color:var(--blue);font:700 16px Manrope;cursor:pointer;margin-top:18px;text-decoration:underline}
+
+/* як це працює */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:46px 0}
+.how div{padding:20px;border-left:4px solid var(--sun)}
+.how b{display:block;font-size:17px;margin-bottom:4px}
+.how span{color:var(--muted);font-size:15px}
+@media(max-width:700px){.how{grid-template-columns:1fr}}
+footer{padding:10px 0 40px;color:var(--muted);font-size:14px;text-align:center}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.done path{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="school" id="schoolName">Назва вашої школи</span>
+    <h1>Скриня думок</h1>
+    <p class="lead">Щось не подобається — скажіть. Є ідея, як зробити школу кращою — теж скажіть. Ми читаємо кожне повідомлення.</p>
+    <a class="btn" href="#form">Написати</a>
+  </div>
+  <div class="bubbles" aria-hidden="true">
+    <div class="b b1">Дякуємо за чудовий гурток!</div>
+    <div class="b b2">Можна більше розеток у класі?</div>
+    <div class="b b3">Є ідея для свята 💡</div>
+  </div>
+</header>
+
+<main class="wrap" id="form">
+  <section class="card">
+    <form id="f" novalidate>
+      <div id="formBody">
+        <h2>Що ви хочете сказати?</h2>
+        <p class="sub">Це займе хвилину. Можна написати анонімно.</p>
+
+        <div class="types">
+          <input type="radio" name="type" id="t-w" value="побажання" checked>
+          <input type="radio" name="type" id="t-c" value="скарга">
+          <label class="lw" for="t-w"><span class="ico">💡</span><span>Побажання<small>ідея або подяка</small></span></label>
+          <label class="lc" for="t-c"><span class="ico">⚠️</span><span>Скарга<small>щось пішло не так</small></span></label>
+        </div>
+
+        <div class="field">
+          <label for="msg">Ваше повідомлення</label>
+          <textarea id="msg" maxlength="3000" placeholder="Опишіть ситуацію або ідею якомога конкретніше"></textarea>
+          <div class="count"><span id="cnt">0</span> / 3000</div>
+        </div>
+
+        <label class="anon"><input type="checkbox" id="anon"> Надіслати анонімно</label>
+
+        <div class="reveal" id="who">
+          <div class="row" style="padding-top:12px">
+            <div class="field"><label for="name">Ім’я <span class="opt">(необов’язково)</span></label><input type="text" id="name" maxlength="100" autocomplete="name"></div>
+            <div class="field"><label for="contact">Як з вами зв’язатися <span class="opt">(необов’язково)</span></label><input type="text" id="contact" maxlength="100" placeholder="Телефон або @нік у Telegram"></div>
+          </div>
+        </div>
+
+        <input class="hp" type="text" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="err" id="err" role="alert"></div>
+        <button class="btn" id="send" type="submit" style="margin-top:8px">Надіслати</button>
+      </div>
+
+      <div class="done" id="done">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="48"/><path d="M30 52l14 14 27-30"/></svg>
+        <h2>Надіслано!</h2>
+        <p>Дякуємо, що написали. Ваше повідомлення вже отримала адміністрація школи.</p>
+        <button type="button" class="link" id="again">Написати ще одне</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="how">
+    <div><b>Пишете</b><span>Обираєте, скарга це чи побажання, і описуєте суть.</span></div>
+    <div><b>Ми отримуємо</b><span>Повідомлення одразу приходить двом відповідальним людям.</span></div>
+    <div><b>Реагуємо</b><span>Якщо залишите контакт — відповімо вам напряму.</span></div>
+  </div>
+</main>
+<footer>Зроблено випускником школи з любов’ю 💙</footer>
+
+<script>
+// ====== НАЛАШТУВАННЯ ======
+const BOT_TOKEN = '8831276926:AAGJdmeoGbDElgG0Hbch8Lt0xUOZLrKu_Ew';
+const CHAT_IDS  = ['ВСТАВТЕ_ID_ПЕРШОЇ_ЛЮДИНИ', 'ВСТАВТЕ_ID_ДРУГОЇ_ЛЮДИНИ'];
+// ==========================
+const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const showDone = () => { $('formBody').style.display = 'none'; $('done').classList.add('show'); };
+const $ = (id) => document.getElementById(id);
+const msg = $('msg'), err = $('err'), btn = $('send');
+
+msg.addEventListener('input', () => $('cnt').textContent = msg.value.length);
+$('anon').addEventListener('change', (e) => $('who').classList.toggle('off', e.target.checked));
+
+$('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  err.textContent = '';
+  if (msg.value.trim().length < 5) { err.textContent = 'Напишіть хоча б кілька слів — мінімум 5 символів.'; msg.focus(); return; }
+
+  const last = +localStorage.getItem('lastSend') || 0;
+  if (Date.now() - last < 30000) { err.textContent = 'Зачекайте пів хвилини перед наступним повідомленням.'; return; }
+  if ($('website').value) { showDone(); return; } // honeypot для ботів
+
+  btn.disabled = true; btn.textContent = 'Надсилаємо…';
+  try {
+    const isC = document.querySelector('input[name=type]:checked').value === 'скарга';
+    const anon = $('anon').checked;
+    const name = anon ? 'Анонімно' : ($('name').value.trim().slice(0,100) || 'Не вказано');
+    const contact = !anon && $('contact').value.trim() ? `\n<b>Контакт:</b> ${esc($('contact').value.trim().slice(0,100))}` : '';
+    const text = (isC ? '🔴 <b>Нова скарга</b>' : '🟢 <b>Нове побажання</b>') +
+      `\n\n${esc(msg.value.trim())}\n\n<b>Від:</b> ${esc(name)}${contact}`;
+
+    const res = await Promise.allSettled(CHAT_IDS.map(chat_id =>
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id, text, parse_mode: 'HTML' })
+      }).then(r => { if (!r.ok) throw new Error('tg'); })
+    ));
+    if (!res.some(r => r.status === 'fulfilled')) throw new Error('fail');
+    localStorage.setItem('lastSend', Date.now());
+    showDone();
+  } catch (x) {
+    err.textContent = 'Не вдалося надіслати. Перевірте інтернет і спробуйте ще раз.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Надіслати';
+  }
+});
+
+$('again').addEventListener('click', () => {
+  $('f').reset(); $('cnt').textContent = 0; $('who').classList.remove('off');
+  $('done').classList.remove('show'); $('formBody').style.display = '';
+});
+</script>
+</body>
+</html>
